@@ -20,6 +20,7 @@
   },
   "registries": {
     "@bundui": "https://bundui.io/r/{name}.json",
-    "@shark": "https://shark.vini.one/r/{name}.json"
+    "@shark": "https://shark.vini.one/r/{name}.json",
+    "@hextaui": "https://hextaui.com/r/{name}.json"
   }
 }

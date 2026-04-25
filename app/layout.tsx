@@ -37,7 +37,7 @@ export default function RootLayout({
         >
           <TooltipProvider>
             {children}
-            <Toaster position="top-center"  expand visibleToasts={5}/>
+            <Toaster position="top-center" expand visibleToasts={5}/>
           </TooltipProvider>
         </ThemeProvider>
       </body>
