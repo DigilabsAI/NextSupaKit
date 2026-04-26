@@ -191,49 +191,7 @@ export default function SettingsPreferences({
             </div>
 
             <div className="grid gap-4 md:grid-cols-2">
-              {/* Theme Selection */}
-              <div className="flex flex-col gap-4 rounded-lg border p-4 md:col-span-2">
-                <div className="flex items-center gap-2">
-                  <div className="flex size-8 items-center justify-center rounded-lg bg-muted">
-                    <Sun className="size-4" />
-                  </div>
-                  <FieldLabel className="mb-0">Theme</FieldLabel>
-                </div>
-                <div className="grid grid-cols-3 gap-2">
-                  {[
-                    { value: "light", label: "Light", icon: Sun },
-                    { value: "dark", label: "Dark", icon: Moon },
-                    { value: "system", label: "System", icon: Layout },
-                  ].map((theme) => {
-                    const Icon = theme.icon;
-                    return (
-                      <button
-                        aria-label={`Select ${theme.label} theme`}
-                        className={cn(
-                          "flex flex-col items-center gap-2 rounded-lg border-2 p-3 transition-all",
-                          localPreferences.theme === theme.value
-                            ? "border-primary bg-primary/5"
-                            : "border-muted hover:border-primary/50"
-                        )}
-                        key={theme.value}
-                        onClick={() =>
-                          updatePreference(
-                            "theme",
-                            theme.value as "light" | "dark" | "system"
-                          )
-                        }
-                        type="button"
-                      >
-                        <Icon className="size-5" />
-                        <span className="font-medium text-xs">
-                          {theme.label}
-                        </span>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
+         
               {/* Accent Color */}
               <div className="flex flex-col gap-4 rounded-lg border p-4">
                 <div className="flex items-center gap-2">
@@ -291,32 +249,6 @@ export default function SettingsPreferences({
                 </Select>
               </div>
 
-              {/* Density */}
-              <div className="flex flex-col gap-4 rounded-lg border p-4">
-                <div className="flex items-center gap-2">
-                  <div className="flex size-8 items-center justify-center rounded-lg bg-muted">
-                    <Layout className="size-4" />
-                  </div>
-                  <FieldLabel className="mb-0" htmlFor="density">
-                    Display Density
-                  </FieldLabel>
-                </div>
-                <Select
-                  onValueChange={(
-                    value: "compact" | "comfortable" | "spacious"
-                  ) => updatePreference("density", value)}
-                  value={localPreferences.density}
-                >
-                  <SelectTrigger className="w-full" id="density">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="compact">Compact</SelectItem>
-                    <SelectItem value="comfortable">Comfortable</SelectItem>
-                    <SelectItem value="spacious">Spacious</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
             </div>
           </div>
 

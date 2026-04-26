@@ -19,8 +19,12 @@
     "hooks": "@/hooks"
   },
   "registries": {
+     "@ss-blocks":"https://shadcnstudio.com/r/blocks/{name}.json",
     "@bundui": "https://bundui.io/r/{name}.json",
     "@shark": "https://shark.vini.one/r/{name}.json",
-    "@hextaui": "https://hextaui.com/r/{name}.json"
+    "@hextaui": "https://hextaui.com/r/{name}.json",
+    "@pacekit": "https://ui.pacekit.dev/r/{name}.json",
+    "@efferd": "https://efferd.com/r/{name}.json",
+    "@motion-primitives": "https://motion-primitives.com/c/{name}.json"
   }
 }

@@ -8,11 +8,12 @@ import {
   GalleryVerticalEnd,
   PieChart,
   Settings2,
+  LogsIcon
 } from "lucide-react"
 
-import { NavMain } from "@/components/nav-main"
-import { NavUser } from "@/components/nav-user"
-import { TeamSwitcher } from "@/components/team-switcher"
+import { NavMain } from "@/components/system/nav-main"
+import { NavUser } from "@/components/system/nav-user"
+import { TeamSwitcher } from "@/components/system/team-switcher"
 import {
   Sidebar,
   SidebarContent,
@@ -20,14 +21,12 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar"
+import { useUser } from "@/store/user"
+
+
 
 // This is sample data.
 const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
   teams: [
     {
       name: "Digilabs",
@@ -70,6 +69,11 @@ const data = {
         },
       ],
     },
+      {
+      title: "Logs",
+      url: "/logs",
+      icon: LogsIcon,
+    },
     {
       title: "Settings",
       url: "/settings",
@@ -79,6 +83,17 @@ const data = {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+
+  const user = useUser((state) => state.user);
+  const mappedUser = user
+    ? {
+     
+        name: user.user_metadata?.full_name  || user.user_metadata?.name|| "User",
+        email: user.email || "",
+        avatar: user.user_metadata?.avatar_url || "",
+      }
+    : null;
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -88,7 +103,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavMain items={data.navMain} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={mappedUser} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

@@ -38,7 +38,7 @@ export function RecentDocuments() {
         </div>
       </div>
 
-      <div className="px-[14px] pb-4 overflow-y-auto flex-1">
+    <div className="px-[14px] pb-4 overflow-y-auto flex-1 no-scrollbar">
         <div className="space-y-[8px]">
           {documents.map((doc) => {
             const Icon = iconMap[doc.icon as keyof typeof iconMap] || FileText;

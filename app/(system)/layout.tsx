@@ -1,12 +1,5 @@
-import { DeployButton } from "@/components/deploy-button";
-import { EnvVarWarning } from "@/components/env-var-warning";
-import { AuthButton } from "@/components/auth-button";
-import { ThemeSwitcher } from "@/components/theme-switcher";
-import { hasEnvVars } from "@/lib/utils";
-import Link from "next/link";
-import { Suspense } from "react";
-
-import { AppSidebar } from "@/components/app-sidebar";
+import { ThemeSwitcher } from "@/components/system/theme-switcher";
+import { AppSidebar } from "@/components/system/app-sidebar";
 import { Separator } from "@/components/ui/separator";
 import {
   SidebarInset,
