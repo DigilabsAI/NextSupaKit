@@ -6,7 +6,6 @@ export default function SettingsPage() {
   const tabs = [
     { name: "General", value: "general" },
     { name: "Preferences", value: "preferences" },
-    { name: "Users", value: "users" },
   ];
 
   return (
@@ -33,9 +32,6 @@ export default function SettingsPage() {
             <SettingsPreferences />
           </TabsContent>
 
-          <TabsContent value="users" className="mt-4">
-            <div>Users content here</div>
-          </TabsContent>
         </Tabs>
       </div>
     </div>

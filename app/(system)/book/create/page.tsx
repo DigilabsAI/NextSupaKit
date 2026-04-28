@@ -1,5 +1,10 @@
+import AddBookForm from "@/components/system/add-book-form";
+
 export default function page() {
   return (
-    <div>create book page</div>
+    <div>
+      <AddBookForm mode="create"
+        onSubmit={createBook} />
+    </div>
   )
 }

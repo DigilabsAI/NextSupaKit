@@ -48,9 +48,15 @@ export function HeroSection() {
                 </p>
 
                 <div className="fade-in slide-in-from-bottom-10 flex animate-in flex-row flex-wrap items-center justify-center gap-3 fill-mode-backwards pt-2 delay-300 duration-500 ease-out">
-                    <Button asChild className="rounded-sm" size="lg">
+                     <Button asChild className="rounded-sm" variant={"outline"}>
+                      <Link href={'/dashboard'}>
+                        Dashboard{" "}
+                        <ArrowRightIcon data-icon="inline-end" />
+                        </Link>
+                    </Button>
+                    <Button asChild className="rounded-sm">
                       <Link href={'/'}>
-                        Read Documentation{" "}
+                        Read Docs{" "}
                         <ArrowRightIcon data-icon="inline-end" />
                         </Link>
                     </Button>

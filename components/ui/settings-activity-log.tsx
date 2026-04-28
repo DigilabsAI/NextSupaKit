@@ -37,15 +37,15 @@ export interface ActivityLogEntry {
   id: string;
   action: string;
   type:
-    | "login"
-    | "logout"
-    | "password_change"
-    | "profile_update"
-    | "settings_change"
-    | "export"
-    | "delete"
-    | "create"
-    | "update";
+  | "login"
+  | "logout"
+  | "password_change"
+  | "profile_update"
+  | "settings_change"
+  | "export"
+  | "delete"
+  | "create"
+  | "update";
   description: string;
   ipAddress: string;
   location: string;
@@ -130,9 +130,9 @@ export default function SettingsActivityLog({
       const exportRange =
         dateRange.start && dateRange.end
           ? {
-              start: new Date(dateRange.start),
-              end: new Date(dateRange.end),
-            }
+            start: new Date(dateRange.start),
+            end: new Date(dateRange.end),
+          }
           : undefined;
 
       await onExport?.({
@@ -175,9 +175,6 @@ export default function SettingsActivityLog({
                   value={searchQuery}
                 />
               </InputGroup>
-            </div>
-
-            <div className="flex flex-col gap-4 rounded-lg border p-4">
               <div className="flex items-center gap-2">
                 <div className="flex size-8 items-center justify-center rounded-lg bg-muted">
                   <Filter className="size-4" />
@@ -219,9 +216,6 @@ export default function SettingsActivityLog({
                   value={dateRange.start}
                 />
               </InputGroup>
-            </div>
-
-            <div className="flex flex-col gap-4 rounded-lg border p-4">
               <div className="flex items-center gap-2">
                 <div className="flex size-8 items-center justify-center rounded-lg bg-muted">
                   <Calendar className="size-4" />
