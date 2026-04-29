@@ -57,15 +57,11 @@ const data = {
       items: [
          {
           title: "Book list",
-          url: "/book",
+          url: "/books",
         },
         {
           title: "Create",
-          url: "/book/create",
-        },
-        {
-          title: "Update",
-           url: "/book/update",
+          url: "/books/create",
         },
       ],
     },

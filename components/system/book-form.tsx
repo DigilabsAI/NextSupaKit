@@ -40,13 +40,11 @@ export type BookFormValues = z.infer<typeof bookSchema>;
 type BookFormProps = {
   mode?: "create" | "update";
   defaultValues?: Partial<BookFormValues>;
-  onSubmit: (values: BookFormValues) => Promise<void> | void;
 };
 
 export default function BookForm({
   mode = "create",
   defaultValues,
-  onSubmit,
 }: BookFormProps) {
   const form = useForm<BookFormValues>({
     resolver: zodResolver(bookSchema),
@@ -65,7 +63,29 @@ export default function BookForm({
   });
 
   async function handleSubmit(values: BookFormValues) {
-    await onSubmit(values);
+    if (mode === "create") {
+      await handleSubmitAdd(values);
+    } else {
+      await handleSubmitUpdate(values);
+    }
+  }
+
+  async function handleSubmitAdd(values: BookFormValues) {
+    console.log(values);
+
+  
+  }
+
+  async function handleSubmitUpdate(values: BookFormValues) {
+    console.log(values);
+
+    await fetch("/api/books", {
+      method: "POST",
+      body: JSON.stringify(values),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
   }
 
   return (
