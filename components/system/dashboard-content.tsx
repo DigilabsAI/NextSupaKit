@@ -9,9 +9,8 @@ export function DashboardContent() {
   const { stats } = useDashboardStore();
 
   return (
-
-    <div className="mx-auto w-full space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="mx-auto w-full space-y-6 min-h-screen">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
         {stats.map((stat) => (
           <StatCard
             key={stat.id}
@@ -22,12 +21,10 @@ export function DashboardContent() {
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <ChartCard />
         <RecentDocuments />
       </div>
-
     </div>
-
   );
 }

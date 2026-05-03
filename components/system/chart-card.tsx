@@ -45,7 +45,7 @@ export function ChartCard() {
         <div className="flex items-center gap-2">
           <Users className="size-4 text-muted-foreground" />
           <h2 className="text-[15px] font-normal text-foreground tracking-[-0.45px]">
-            Leads Over Time
+            Chart Example
           </h2>
         </div>
 
@@ -83,7 +83,7 @@ export function ChartCard() {
             style={{ backgroundColor: NEW_LEADS_COLOR }}
           />
           <span className="text-xs font-medium text-muted-foreground tracking-[-0.24px]">
-            New Leads
+           Label1
           </span>
         </div>
 
@@ -93,7 +93,7 @@ export function ChartCard() {
             style={{ backgroundColor: REPLIED_COLOR }}
           />
           <span className="text-xs font-medium text-muted-foreground tracking-[-0.24px]">
-            Replied
+            Label2
           </span>
         </div>
       </div>

@@ -150,9 +150,9 @@ export default function SettingsActivityLog({
       <CardHeader>
         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div className="flex min-w-0 flex-1 flex-col gap-2">
-            <CardTitle className="wrap-break-word">Activity Log</CardTitle>
+            <CardTitle className="wrap-break-word">Example Log</CardTitle>
             <CardDescription className="wrap-break-word">
-              View your account activity and audit trail
+              View example activity and audit trail
             </CardDescription>
           </div>
         </div>

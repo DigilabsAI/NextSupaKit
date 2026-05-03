@@ -26,7 +26,7 @@ export function RecentDocuments() {
     <div className="relative overflow-hidden rounded-xl border border-border bg-card max-h-[400px] flex flex-col">
       <div className="flex items-center justify-between px-4 pt-[15px] pb-4 flex-wrap gap-2">
         <h2 className="text-[15px] font-normal text-foreground tracking-[-0.45px]">
-          Recent Documents
+          Table  example
         </h2>
 
         <div className="relative">

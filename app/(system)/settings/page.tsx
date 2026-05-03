@@ -1,5 +1,5 @@
 import UserGeneral from "@/components/system/account-settings";
-import SettingsPreferences from "@/components/ui/settings-preferences";
+import SettingsPreferences from "@/components/system/settings-preferences";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 export default function SettingsPage() {
