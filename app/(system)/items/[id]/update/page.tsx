@@ -1,4 +1,4 @@
-import BookFormSkeleton from "@/components/skeleton/book-form-skeleton";
+import ItemFormSkeleton from "@/components/skeleton/item-form-skeleton";
 import ItemForm from "@/components/system/item-form";
 import { Suspense } from "react";
 import { getItemById } from "@/lib/actions/item";
@@ -11,7 +11,7 @@ type PageProps = {
 export default function Page({ params }: PageProps) {
   return (
     <div>
-      <Suspense fallback={<BookFormSkeleton />}>
+      <Suspense fallback={<ItemFormSkeleton />}>
         {params.then(({ id }) => (
           <Content id={id} />
         ))}

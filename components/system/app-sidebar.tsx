@@ -2,10 +2,7 @@
 
 import * as React from "react"
 import {
-  AudioWaveform,
   BookOpen,
-  Command,
-  GalleryVerticalEnd,
   PieChart,
   Settings2,
   LogsIcon
@@ -22,6 +19,7 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar"
 import { useUser } from "@/store/user"
+import { LogoIcon } from "../marketing/logo"
 
 
 
@@ -30,18 +28,8 @@ const data = {
   teams: [
     {
       name: "Digilabs",
-      logo: GalleryVerticalEnd,
+      logo: LogoIcon,
       plan: "Enterprise",
-    },
-    {
-      name: "Acme Corp.",
-      logo: AudioWaveform,
-      plan: "Startup",
-    },
-    {
-      name: "Evil Corp.",
-      logo: Command,
-      plan: "Free",
     },
   ],
   navMain: [

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { getItemById } from "@/lib/actions/item";
 import { notFound } from "next/navigation";
+import { ItemContentSkeleton } from "@/components/skeleton/item-skeleton";
 
 type PageProps = {
     params: Promise<{ id: string }>;
@@ -13,7 +14,7 @@ type ContentProps = {
 
 export default function Page({ params }: PageProps) {
     return (
-        <Suspense fallback={<p>Loading...</p>}>
+        <Suspense fallback={<ItemContentSkeleton />}>
             {params.then(({ id }) => (
                 <ItemContent id={id} />
             ))}

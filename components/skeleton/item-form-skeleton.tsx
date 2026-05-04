@@ -5,7 +5,7 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 
-export default function BookFormSkeleton() {
+export default function ItemFormSkeleton() {
   return (
     <Card className="mx-auto max-w-3xl">
       <CardHeader className="space-y-3">

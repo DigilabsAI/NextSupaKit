@@ -1,3 +1,4 @@
+import { ItemsSectionSkeleton } from "@/components/skeleton/item-list-skeleton";
 import { getAllItems } from "@/lib/actions/item";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -5,7 +6,7 @@ import { Suspense } from "react";
 export default function ItemsPage() {
 
   return (
-    <Suspense fallback={<p>Loading...</p>}>
+    <Suspense fallback={<ItemsSectionSkeleton />}>
       <ItemsSection />
     </Suspense>
   );
