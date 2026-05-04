@@ -1,15 +1,15 @@
 import BookFormSkeleton from "@/components/skeleton/book-form-skeleton";
-import AddBookForm from "@/components/system/book-form";
+import ItemForm from "@/components/system/item-form";
 import { Suspense } from "react";
 
 export default function page() {
 
-  
+
 
   return (
     <div>
-      <Suspense fallback={<BookFormSkeleton/>}>
-        <AddBookForm mode="create" />
+      <Suspense fallback={<BookFormSkeleton />}>
+        <ItemForm mode="create" />
       </Suspense>
     </div>
   )

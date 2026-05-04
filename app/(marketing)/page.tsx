@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { HeroSection } from "@/components/marketing/hero";
 import { FaqsSection } from "@/components/marketing/faqs-section";
+import { LogoIcon } from "@/components/marketing/logo";
 
 export default function Home() {
   return (
@@ -13,7 +14,7 @@ export default function Home() {
         <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
           <div className="w-full max-w-5xl flex justify-between items-center p-3 px-5 text-sm">
             <div className="flex gap-5 items-center font-semibold">
-              <Link href={"/"}>Capykit's Basic Kit</Link>
+              <Link href={"/"} className="flex justify-center items-center gap-2"> <LogoIcon className="size-6" /> <span>Capykit's Basic Kit</span></Link>
               <div className="flex items-center gap-2">
               </div>
             </div>

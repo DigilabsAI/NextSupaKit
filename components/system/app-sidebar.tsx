@@ -51,21 +51,21 @@ const data = {
       icon: PieChart,
     },
     {
-      title: "Books",
-      url: "/book",
+      title: "Items",
+      url: "/items",
       icon: BookOpen,
       items: [
-         {
-          title: "Book list",
-          url: "/books",
+        {
+          title: "Item list",
+          url: "/items",
         },
         {
           title: "Create",
-          url: "/books/create",
+          url: "/items/create",
         },
       ],
     },
-      {
+    {
       title: "Logs",
       url: "/logs",
       icon: LogsIcon,
@@ -83,11 +83,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const user = useUser((state) => state.user);
   const mappedUser = user
     ? {
-     
-        name: user.user_metadata?.full_name  || user.user_metadata?.name|| "User",
-        email: user.email || "",
-        avatar: user.user_metadata?.avatar_url || "",
-      }
+
+      name: user.user_metadata?.full_name || user.user_metadata?.name || "User",
+      email: user.email || "",
+      avatar: user.user_metadata?.avatar_url || "",
+    }
     : null;
 
   return (

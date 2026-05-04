@@ -27,48 +27,12 @@ export default function BookFormSkeleton() {
             <Skeleton className="h-10 w-full" />
           </div>
 
-          {/* ISBN */}
-          <div className="space-y-2">
-            <Skeleton className="h-4 w-16" />
-            <Skeleton className="h-10 w-full" />
-          </div>
-
-          {/* Category */}
-          <div className="space-y-2">
-            <Skeleton className="h-4 w-24" />
-            <Skeleton className="h-10 w-full" />
-          </div>
-
-          {/* Publisher */}
-          <div className="space-y-2">
-            <Skeleton className="h-4 w-24" />
-            <Skeleton className="h-10 w-full" />
-          </div>
-
-          {/* Published Year */}
-          <div className="space-y-2">
-            <Skeleton className="h-4 w-28" />
-            <Skeleton className="h-10 w-full" />
-          </div>
-
-          {/* Copies */}
-          <div className="space-y-2">
-            <Skeleton className="h-4 w-16" />
-            <Skeleton className="h-10 w-full" />
-          </div>
-
-          {/* Shelf Location */}
-          <div className="space-y-2">
-            <Skeleton className="h-4 w-28" />
-            <Skeleton className="h-10 w-full" />
-          </div>
 
           {/* Empty slot to preserve grid balance */}
           <div className="hidden md:block" />
 
           {/* Description */}
           <div className="space-y-2 md:col-span-2">
-            <Skeleton className="h-4 w-24" />
             <Skeleton className="h-28 w-full" />
           </div>
 

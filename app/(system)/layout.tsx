@@ -7,6 +7,8 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { DynamicBreadcrumb } from "@/components/ui/dynamic-breadcrumb";
+import { Suspense } from "react";
+import { BreadcrumbSkeleton } from "@/components/skeleton/breadcrumb-skeleton";
 
 export default function ProtectedLayout({
   children,
@@ -21,7 +23,9 @@ export default function ProtectedLayout({
           <div className=" flex items-center gap-2 px-4">
             <SidebarTrigger className="-ml-3" />
             <Separator orientation="vertical" className="mr-2 h-4" />
-            <DynamicBreadcrumb />
+            <Suspense fallback={<BreadcrumbSkeleton />}>
+              <DynamicBreadcrumb />
+            </Suspense>
           </div>
           <ThemeSwitcher />
         </header>

@@ -12,7 +12,7 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "Next.js and Supabase Starter Kit",
+  title: "Cappy Kit x Supabase",
   description: "The fastest way to build apps with Next.js and Supabase",
 };
 
@@ -38,9 +38,9 @@ export default function RootLayout({
         >
           <TooltipProvider>
             {children}
-            <Toaster position="top-center" expand visibleToasts={5}/>
+            <Toaster position="top-center" expand visibleToasts={5} />
           </TooltipProvider>
-          <SessionProvider/>
+          <SessionProvider />
         </ThemeProvider>
       </body>
     </html>
