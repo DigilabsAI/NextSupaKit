@@ -47,6 +47,10 @@ export async function updateSession(request: NextRequest) {
   const { data } = await supabase.auth.getClaims();
   const user = data?.claims;
 
+  // console.log("role:", user?.user_metadata?.role);
+  // console.log("fullname:", user?.user_metadata?.fullname);
+  // console.log("avatar:", user?.user_metadata?.avatar_url);
+
   if (
     request.nextUrl.pathname !== "/" &&
     !user &&

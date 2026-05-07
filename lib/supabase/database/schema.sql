@@ -4,6 +4,7 @@ create table if not exists public.profiles (
   gender text,
   mobile_number text,
   avatar_url text,
+  role text not null default 'user',
   email text unique not null,
   hashed_password text not null,
   created_at timestamptz not null default now(),

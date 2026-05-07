@@ -75,6 +75,11 @@ const PersonalInfo = () => {
         <h3 className='font-semibold'>Personal Information</h3>
         <p className='text-muted-foreground text-sm'>Manage your personal information and role.</p>
       </div>
+      <div className='flex justify-end'>
+        <Button type='submit' className='max-sm:w-full'>
+          Save Changes
+        </Button>
+      </div>
 
       {/* Content */}
       <div className='space-y-6 lg:col-span-2'>
@@ -148,11 +153,7 @@ const PersonalInfo = () => {
 
           </div>
         </form>
-        <div className='flex justify-end'>
-          <Button type='submit' className='max-sm:w-full'>
-            Save Changes
-          </Button>
-        </div>
+
       </div>
     </div>
   )
