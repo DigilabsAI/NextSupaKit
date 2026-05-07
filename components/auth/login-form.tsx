@@ -16,36 +16,79 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+type LoginVariant = "email" | "username" | "oauth";
+
+type LoginFormProps = React.ComponentPropsWithoutRef<"div"> & {
+  variant?: LoginVariant;
+};
+
 export function LoginForm({
   className,
+  variant = "email",
   ...props
-}: React.ComponentPropsWithoutRef<"div">) {
-  const [email, setEmail] = useState("");
+}: LoginFormProps) {
+  const supabase = createClient();
+  const router = useRouter();
+
+  const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
 
-  const handleLogin = async (e: React.FormEvent) => {
+  async function handleEmailLogin(e: React.FormEvent) {
     e.preventDefault();
-    const supabase = createClient();
     setIsLoading(true);
     setError(null);
 
-    try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-      if (error) throw error;
-      // Update this route to redirect to an authenticated route. The user already has an active session.
-      router.push("/dashboard");
-    } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : "An error occurred");
-    } finally {
+    const { error } = await supabase.auth.signInWithPassword({
+      email: identifier,
+      password,
+    });
+
+    if (error) setError(error.message);
+    else router.push("/dashboard");
+
+    setIsLoading(false);
+  }
+
+  async function handleUsernameLogin(e: React.FormEvent) {
+    e.preventDefault();
+    setIsLoading(true);
+    setError(null);
+
+    const { data, error: userError } = await supabase
+      .from("profiles")
+      .select("email")
+      .eq("username", identifier)
+      .single();
+
+    if (userError || !data) {
+      setError("Username not found");
       setIsLoading(false);
+      return;
     }
-  };
+
+    const { error } = await supabase.auth.signInWithPassword({
+      email: data.email,
+      password,
+    });
+
+    if (error) setError(error.message);
+    else router.push("/dashboard");
+
+    setIsLoading(false);
+  }
+
+  async function handleOAuth(provider: "github" | "google") {
+    await supabase.auth.signInWithOAuth({
+      provider,
+      options: {
+        redirectTo: `${location.origin}/auth/callback`,
+      },
+    });
+  }
+
+  const isForm = variant === "email" || variant === "username";
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -53,33 +96,39 @@ export function LoginForm({
         <CardHeader>
           <CardTitle className="text-2xl">Login</CardTitle>
           <CardDescription>
-            Enter your email below to login to your account
+            {variant === "email" && "Login with email and password"}
+            {variant === "username" && "Login with username and password"}
+            {variant === "oauth" && "Login with GitHub or Google"}
           </CardDescription>
         </CardHeader>
+
         <CardContent>
-          <form onSubmit={handleLogin}>
-            <div className="flex flex-col gap-6">
+          {isForm ? (
+            <form
+              onSubmit={
+                variant === "email"
+                  ? handleEmailLogin
+                  : handleUsernameLogin
+              }
+              className="space-y-4"
+            >
               <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="identifier">
+                  {variant === "email" ? "Email" : "Username"}
+                </Label>
+
                 <Input
-                  id="email"
-                  type="email"
-                  placeholder="m@example.com"
+                  id="identifier"
+                  type={variant === "email" ? "email" : "text"}
                   required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={identifier}
+                  onChange={(e) => setIdentifier(e.target.value)}
                 />
               </div>
+
               <div className="grid gap-2">
-                <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
-                  <Link
-                    href="/auth/forgot-password"
-                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-                  >
-                    Forgot your password?
-                  </Link>
-                </div>
+                <Label htmlFor="password">Password</Label>
+
                 <Input
                   id="password"
                   type="password"
@@ -88,21 +137,47 @@ export function LoginForm({
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
-              {error && <p className="text-sm text-red-500">{error}</p>}
-              <Button type="submit" className="w-full" disabled={isLoading}>
+
+              {error && (
+                <p className="text-sm text-red-500">{error}</p>
+              )}
+
+              <Button
+                type="submit"
+                className="w-full"
+                disabled={isLoading}
+              >
                 {isLoading ? "Logging in..." : "Login"}
               </Button>
-            </div>
-            <div className="mt-4 text-center text-sm">
-              Don&apos;t have an account?{" "}
-              <Link
-                href="/auth/sign-up"
-                className="underline underline-offset-4"
+            </form>
+          ) : (
+            <div className="space-y-3">
+              <Button
+                className="w-full"
+                onClick={() => handleOAuth("github")}
               >
-                Sign up
-              </Link>
+                Continue with GitHub
+              </Button>
+
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={() => handleOAuth("google")}
+              >
+                Continue with Google
+              </Button>
             </div>
-          </form>
+          )}
+
+          <div className="mt-4 text-center text-sm">
+            Don&apos;t have an account?{" "}
+            <Link
+              href="/auth/sign-up"
+              className="underline underline-offset-4"
+            >
+              Sign up
+            </Link>
+          </div>
         </CardContent>
       </Card>
     </div>
