@@ -2,7 +2,7 @@
 
 import { useRef, useState, useTransition } from 'react'
 import Image from 'next/image'
-import { UploadCloudIcon, ImageIcon } from 'lucide-react'
+import { UploadCloudIcon, ImageIcon, Save } from 'lucide-react'
 
 import { removeAvatar, savePersonalInfo, uploadAvatar } from '@/lib/actions/profile'
 
@@ -105,20 +105,39 @@ export default function PersonalInfo({ data }: Props) {
       <div className="flex flex-col gap-8 py-4 lg:flex-row lg:items-start lg:gap-12 items-center">
 
         <div className="flex w-full flex-col items-center gap-2 lg:w-auto">
-          <div
-            onClick={() => inputRef.current?.click()}
-            className="flex size-24 cursor-pointer items-center justify-center overflow-hidden rounded-full border sm:size-28"
-          >
-            {preview ? (
-              <Image
-                src={preview}
-                alt="avatar"
-                width={112}
-                height={112}
-                className="h-full w-full object-cover"
-              />
-            ) : (
-              <ImageIcon />
+          {/* Avatar Wrapper */}
+          <div className="relative">
+            <div
+              onClick={() => inputRef.current?.click()}
+              className="flex size-24 cursor-pointer items-center justify-center overflow-hidden rounded-full border sm:size-28"
+            >
+              {preview ? (
+                <Image
+                  src={preview}
+                  alt="avatar"
+                  width={112}
+                  height={112}
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <ImageIcon />
+              )}
+            </div>
+
+            {/* Remove X */}
+            {preview && (
+              <button
+                type="button"
+                onClick={handleRemoveAvatar}
+                disabled={isRemoving}
+                className="absolute -right-1 top-0 z-10 flex size-7 items-center justify-center rounded-full border bg-background shadow-sm transition hover:bg-destructive hover:text-white disabled:pointer-events-none disabled:opacity-50"
+              >
+                {isRemoving ? (
+                  <span className="text-xs">...</span>
+                ) : (
+                  <X className="h-4 w-4" />
+                )}
+              </button>
             )}
           </div>
 
@@ -138,16 +157,6 @@ export default function PersonalInfo({ data }: Props) {
           >
             <UploadCloudIcon className="mr-2 h-4 w-4" />
             {isUploading ? 'Uploading...' : 'Upload'}
-          </Button>
-
-          <Button
-            type="button"
-            variant="ghost"
-            disabled={isRemoving || !preview}
-            onClick={handleRemoveAvatar}
-            className="text-destructive"
-          >
-            {isRemoving ? 'Removing...' : 'Remove'}
           </Button>
         </div>
 
@@ -202,6 +211,7 @@ export default function PersonalInfo({ data }: Props) {
 
       <div className="flex justify-end">
         <Button type="submit" disabled={isPending}>
+          <Save className="size-4" />
           {isPending ? 'Saving...' : 'Save Changes'}
         </Button>
       </div>

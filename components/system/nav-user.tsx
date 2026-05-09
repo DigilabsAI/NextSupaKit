@@ -57,7 +57,7 @@ export function NavUser({
     <SidebarMenu>
       <SidebarMenuItem>
         <DropdownMenu>
-          <DropdownMenuTrigger asChild className="hover:bg-muted bg-muted/100 border border-border">
+          <DropdownMenuTrigger asChild className="hover:bg-secondary border border-border">
             <SidebarMenuButton size="lg">
               <Avatar className="h-8 w-8 rounded-full border border-border">
                 <AvatarImage className="object-cover" src={user.avatar} alt={user.name} />
@@ -72,11 +72,10 @@ export function NavUser({
               </Avatar>
 
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold">{user.name}</span>
-                <span className="truncate text-xs">{user.email}</span>
+                <span className="truncate text-lg ">{user.name}</span>
               </div>
 
-              {/* <ChevronsUpDown className="ml-auto size-4" /> */}
+              <ChevronsUpDown className="ml-auto size-4" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
 
@@ -88,9 +87,9 @@ export function NavUser({
           >
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-2 py-1.5 text-sm">
-                <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src={user.avatar} alt={user.name} />
-                  <AvatarFallback className="rounded-lg">
+                <Avatar className="h-8 w-8 rounded-full border border-border">
+                  <AvatarImage className="object-cover" src={user.avatar} alt={user.name} />
+                  <AvatarFallback className="rounded-full">
                     {user.name
                       .split(" ")
                       .map((n) => n[0])
@@ -110,11 +109,11 @@ export function NavUser({
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
+              <DropdownMenuItem disabled>
                 <BadgeCheck />
                 Account
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuItem disabled>
                 <Bell />
                 Notifications
               </DropdownMenuItem>
