@@ -23,3 +23,4 @@ create table if not exists public.items (
 
 
 --for buckets read the docs
+--bucket created was profile for user avatars

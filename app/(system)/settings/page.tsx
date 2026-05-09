@@ -23,7 +23,6 @@ export async function SettingSection() {
   ];
 
   const data = await getProfile();
-  // console.log(data)
 
   return (
     <div className="w-full py-8">

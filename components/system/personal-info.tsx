@@ -3,7 +3,6 @@
 import { useRef, useState, useTransition } from 'react'
 import Image from 'next/image'
 import { UploadCloudIcon, ImageIcon } from 'lucide-react'
-import { z } from 'zod'
 
 import { removeAvatar, savePersonalInfo, uploadAvatar } from '@/lib/actions/profile'
 
@@ -116,7 +115,7 @@ export default function PersonalInfo({ data }: Props) {
                 alt="avatar"
                 width={112}
                 height={112}
-                className="h-full w-full object-contain"
+                className="h-full w-full object-cover"
               />
             ) : (
               <ImageIcon />

@@ -57,11 +57,11 @@ export function NavUser({
     <SidebarMenu>
       <SidebarMenuItem>
         <DropdownMenu>
-          <DropdownMenuTrigger asChild className="hover:bg-muted border border-border">
+          <DropdownMenuTrigger asChild className="hover:bg-muted bg-muted/100 border border-border">
             <SidebarMenuButton size="lg">
-              <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarImage src={user.avatar} alt={user.name} />
-                <AvatarFallback className="rounded-lg">
+              <Avatar className="h-8 w-8 rounded-full border border-border">
+                <AvatarImage className="object-cover" src={user.avatar} alt={user.name} />
+                <AvatarFallback className="rounded-full">
                   {user.name
                     .split(" ")
                     .map((n) => n[0])
@@ -76,7 +76,7 @@ export function NavUser({
                 <span className="truncate text-xs">{user.email}</span>
               </div>
 
-              <ChevronsUpDown className="ml-auto size-4" />
+              {/* <ChevronsUpDown className="ml-auto size-4" /> */}
             </SidebarMenuButton>
           </DropdownMenuTrigger>
 

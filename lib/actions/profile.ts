@@ -32,6 +32,31 @@ export async function getProfile() {
     }
 }
 
+export async function getAllProfiles() {
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+        .from("profiles")
+        .select(`
+      id,
+      fullname,
+      gender,
+      mobile_number,
+      avatar_url,
+      email,
+      role,
+      created_at
+    `)
+        .order("role", { ascending: true })
+        .order("created_at", { ascending: false });
+
+    if (error) {
+        console.error("getAllProfiles error:", error);
+        return [];
+    }
+
+    return data ?? [];
+}
 
 export async function savePersonalInfo(formData: FormData) {
     const supabase = await createClient()
@@ -94,11 +119,22 @@ export async function uploadAvatar(file: File) {
     const ext = file.name.split('.').pop()?.toLowerCase() || 'png'
     const filePath = `${user_id}/avatar.${ext}`
 
+    // remove old possible avatar files first
+    const possibleFiles = [
+        `${user_id}/avatar.png`,
+        `${user_id}/avatar.jpg`,
+        `${user_id}/avatar.jpeg`,
+        `${user_id}/avatar.webp`,
+        `${user_id}/avatar.gif`,
+    ]
+
+    await supabase.storage.from('profile').remove(possibleFiles)
+
     const { error: uploadError } = await supabase.storage
         .from('profile')
         .upload(filePath, file, {
             upsert: true,
-            contentType: file.type
+            contentType: file.type,
         })
 
     if (uploadError) {
@@ -110,13 +146,14 @@ export async function uploadAvatar(file: File) {
         .from('profile')
         .getPublicUrl(filePath)
 
-    const avatarUrl = data.publicUrl
+    // cache bust version
+    const avatarUrl = `${data.publicUrl}?v=${Date.now()}`
 
     const { error: dbError } = await supabase
         .from('profiles')
         .update({
             avatar_url: avatarUrl,
-            updated_at: new Date().toISOString()
+            updated_at: new Date().toISOString(),
         })
         .eq('id', user_id)
 
@@ -128,7 +165,7 @@ export async function uploadAvatar(file: File) {
     return {
         success: true,
         message: 'Avatar uploaded successfully',
-        url: avatarUrl
+        url: avatarUrl,
     }
 }
 
@@ -142,22 +179,17 @@ export async function removeAvatar() {
         return { success: false, message: 'Unauthorized' }
     }
 
-    const { data: profile } = await supabase
-        .from('profiles')
-        .select('avatar_url')
-        .eq('id', user_id)
-        .single()
-
-    if (!profile?.avatar_url) {
-        return { success: true, message: 'No avatar to remove' }
-    }
-
-    const url = profile.avatar_url
-    const filePath = url.split('/object/public/profile/')[1]
+    const possibleFiles = [
+        `${user_id}/avatar.png`,
+        `${user_id}/avatar.jpg`,
+        `${user_id}/avatar.jpeg`,
+        `${user_id}/avatar.webp`,
+        `${user_id}/avatar.gif`,
+    ]
 
     const { error: storageError } = await supabase.storage
         .from('profile')
-        .remove([filePath])
+        .remove(possibleFiles)
 
     if (storageError) {
         console.error(storageError)
@@ -168,7 +200,7 @@ export async function removeAvatar() {
         .from('profiles')
         .update({
             avatar_url: null,
-            updated_at: new Date().toISOString()
+            updated_at: new Date().toISOString(),
         })
         .eq('id', user_id)
 
@@ -179,6 +211,6 @@ export async function removeAvatar() {
 
     return {
         success: true,
-        message: 'Avatar removed successfully'
+        message: 'Avatar removed successfully',
     }
 }

@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import { getItemById } from "@/lib/actions/item";
 import { notFound } from "next/navigation";
 import { ItemContentSkeleton } from "@/components/skeleton/item-skeleton";
+import { getSessionUser } from "@/lib/actions/session";
 
 type PageProps = {
     params: Promise<{ id: string }>;
@@ -24,6 +25,9 @@ export default function Page({ params }: PageProps) {
 
 async function ItemContent({ id }: ContentProps) {
     const item = await getItemById(id);
+    const session = await getSessionUser();
+
+    const isOwner = session?.id === item?.owner;
 
     if (!item) notFound();
 
@@ -31,12 +35,12 @@ async function ItemContent({ id }: ContentProps) {
         <div className="space-y-4 p-6">
             <div className="flex justify-between">
                 <h1 className="text-2xl font-bold">{item.title}</h1>
-                <Link
+                {isOwner && (<Link
                     href={`/items/${item.id}/update`}
                     className="inline-flex rounded-md border px-4 py-2 text-sm font-medium"
                 >
                     Update Item
-                </Link>
+                </Link>)}
             </div>
 
             <div className="rounded-lg border p-4 space-y-2">
