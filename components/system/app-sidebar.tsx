@@ -1,48 +1,48 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 import {
   BookOpen,
   PieChart,
   Settings2,
   LogsIcon,
   UserCheck,
-  icons,
-} from "lucide-react"
+} from "lucide-react";
 
-import { NavMain } from "@/components/system/nav-main"
-import { NavUser } from "@/components/system/nav-user"
-import { TeamSwitcher } from "@/components/system/team-switcher"
+import { NavMain } from "@/components/system/nav-main";
+import { NavUser } from "@/components/system/nav-user";
+import { TeamSwitcher } from "@/components/system/team-switcher";
+
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
   SidebarRail,
-} from "@/components/ui/sidebar"
-import { useUser } from "@/store/user"
-import { LogoIcon } from "../marketing/logo"
+} from "@/components/ui/sidebar";
 
+import { Skeleton } from "@/components/ui/skeleton";
 
+import { useUser } from "@/store/user";
+import { LogoIcon } from "../marketing/logo";
 
-
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-
+export function AppSidebar({
+  ...props
+}: React.ComponentProps<typeof Sidebar>) {
   const user = useUser((state) => state.user);
+
+  const isLoading = user === null;
+
   const mappedUser = user
     ? {
-      name:
-        user.user_metadata?.full_name ||
-        user.user_metadata?.name ||
-        "User",
+      name: user.claims?.user_metadata?.fullname || "User",
       email: user.email || "",
-      avatar: user.user_metadata?.avatar_url || "",
-      role: user.user_metadata?.role || "user",
+      avatar: user.claims?.user_metadata?.avatar_url || "",
+      role: user.claims?.user_metadata?.role || "user",
     }
     : null;
 
   const isAdmin = mappedUser?.role === "admin";
-
 
   const data = {
     teams: [
@@ -52,6 +52,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         plan: "Enterprise",
       },
     ],
+
     navMain: [
       {
         title: "Dashboard",
@@ -63,14 +64,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         url: "/items",
         icon: BookOpen,
         items: [
-          {
-            title: "Item list",
-            url: "/items",
-          },
-          {
-            title: "Create",
-            url: "/items/create",
-          },
+          { title: "Item List", url: "/items" },
+          { title: "Create", url: "/items/create" },
         ],
       },
       {
@@ -83,6 +78,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         url: "/settings",
         icon: Settings2,
       },
+
       ...(isAdmin
         ? [
           {
@@ -95,19 +91,46 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     ],
   };
 
-
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <TeamSwitcher teams={data.teams} />
+        {isLoading ? (
+          <div className="space-y-2 p-2">
+            <Skeleton className="h-10 w-full rounded-md" />
+          </div>
+        ) : (
+          <TeamSwitcher teams={data.teams} />
+        )}
       </SidebarHeader>
+
       <SidebarContent>
-        <NavMain items={data.navMain} />
+        {isLoading ? (
+          <div className="space-y-3 p-2">
+            <Skeleton className="h-8 w-full rounded-md" />
+            <Skeleton className="h-8 w-full rounded-md" />
+            <Skeleton className="h-8 w-full rounded-md" />
+            <Skeleton className="h-8 w-full rounded-md" />
+          </div>
+        ) : (
+          <NavMain items={data.navMain} />
+        )}
       </SidebarContent>
+
       <SidebarFooter>
-        <NavUser user={mappedUser} />
+        {isLoading ? (
+          <div className="flex items-center gap-3 p-2">
+            <Skeleton className="h-10 w-10 rounded-full" />
+            <div className="space-y-2 flex-1">
+              <Skeleton className="h-4 w-24" />
+              <Skeleton className="h-3 w-32" />
+            </div>
+          </div>
+        ) : (
+          <NavUser user={mappedUser} />
+        )}
       </SidebarFooter>
+
       <SidebarRail />
     </Sidebar>
-  )
+  );
 }

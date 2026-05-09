@@ -1,12 +1,29 @@
-import UserGeneral from "@/components/system/account-settings";
+import { PersonalInfoSkeleton } from "@/components/skeleton/personal-info-skeleton";
+import PersonalInfo from "@/components/system/personal-info";
 import SettingsPreferences from "@/components/system/settings-preferences";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { getProfile } from "@/lib/actions/profile";
+import { Suspense } from "react";
 
 export default function SettingsPage() {
+
+  return (
+    <Suspense fallback={<PersonalInfoSkeleton />}>
+      <SettingSection />
+    </Suspense>
+  )
+}
+
+
+
+export async function SettingSection() {
   const tabs = [
     { name: "General", value: "general" },
     { name: "Preferences", value: "preferences" },
   ];
+
+  const data = await getProfile();
+  // console.log(data)
 
   return (
     <div className="w-full py-8">
@@ -25,7 +42,9 @@ export default function SettingsPage() {
           </TabsList>
 
           <TabsContent value="general" className="mt-4">
-            <UserGeneral />
+            <div className='mx-auto max-w-7xl'>
+              <PersonalInfo data={data} />
+            </div>
           </TabsContent>
 
           <TabsContent value="preferences" className="mt-4">

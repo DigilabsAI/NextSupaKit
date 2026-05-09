@@ -21,7 +21,7 @@
     --accent: 0 0% 96.1%;
     --accent-foreground: 0 0% 9%;
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: var(--color-red-50);
+    --destructive-foreground: var(--color-red-700);
     --border: 0 0% 89.8%;
     --input: 0 0% 89.8%;
     --ring: 0 0% 3.9%;
@@ -39,12 +39,12 @@
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
-    --success: var(--color-emerald-600);
-    --success-foreground: var(--color-green-50);
-    --info: var(--color-sky-600);
-    --info-foreground: var(--color-sky-50);
-    --warning: var(--color-yellow-400);
-    --warning-foreground: var(--color-yellow-950);
+    --success: var(--color-emerald-500);
+    --success-foreground: var(--color-emerald-700);
+    --info: var(--color-blue-500);
+    --info-foreground: var(--color-blue-700);
+    --warning: var(--color-amber-500);
+    --warning-foreground: var(--color-amber-700);
   }
   .dark {
     --background: 0 0% 3.9%;
@@ -62,7 +62,7 @@
     --accent: 0 0% 14.9%;
     --accent-foreground: 0 0% 98%;
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: var(--color-red-50);
+    --destructive-foreground: var(--color-red-400);
     --border: 0 0% 14.9%;
     --input: 0 0% 14.9%;
     --ring: 0 0% 83.1%;
@@ -79,12 +79,12 @@
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
-    --success: var(--color-emerald-600);
-    --success-foreground: var(--color-green-50);
-    --info: var(--color-sky-600);
-    --info-foreground: var(--color-sky-50);
-    --warning: var(--color-yellow-600);
-    --warning-foreground: var(--color-yellow-50);
+    --success: var(--color-emerald-500);
+    --success-foreground: var(--color-emerald-400);
+    --info: var(--color-blue-500);
+    --info-foreground: var(--color-blue-400);
+    --warning: var(--color-amber-500);
+    --warning-foreground: var(--color-amber-400);
   }
 }
 
@@ -136,6 +136,6 @@
 }
 
 .no-scrollbar {
-  -ms-overflow-style: none;  /* IE/Edge */
-  scrollbar-width: none;     /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+  scrollbar-width: none; /* Firefox */
 }

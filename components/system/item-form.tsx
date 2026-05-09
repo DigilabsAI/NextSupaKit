@@ -20,7 +20,7 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
-import { ItemFormValues, ItemSchema } from "@/lib/schema/item";
+import { ItemFormValues, ItemSchema } from "@/lib/zod-schema/item";
 import { submitItem, updateItem } from "@/lib/actions/item";
 
 

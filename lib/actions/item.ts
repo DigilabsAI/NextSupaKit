@@ -1,7 +1,7 @@
 // Book's Server Actions
 "use server";
 
-import { ItemFormValues } from "@/lib/schema/item";
+import { ItemFormValues } from "@/lib/zod-schema/item";
 import { createClient } from "@/lib/supabase/server";
 import { console } from "inspector";
 import { revalidatePath } from "next/cache";

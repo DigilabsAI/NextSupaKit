@@ -1,26 +1,41 @@
 "use client";
 
-import { createClient } from "@/lib/supabase/client";
-import { useUser } from "@/store/user";
 import { useEffect } from "react";
+import { createClient } from "@/lib/supabase/client";
+import { AuthUser, UserClaims, useUser } from "@/store/user";
 
 export default function SessionProvider() {
+  const supabase = createClient();
   const setUser = useUser((state) => state.setUser);
 
-  const supabase = createClient();
   useEffect(() => {
-    supabase.auth.getUser().then(({ data, error }) => {
-      if (error) {
-        console.error(error);
+    const loadUser = async () => {
+      const [{ data: userRes }, { data: claimsRes }] = await Promise.all([
+        supabase.auth.getUser(),
+        supabase.auth.getClaims(),
+      ]);
+
+      const user = userRes.user;
+
+      if (!user) {
+        setUser(null);
         return;
       }
-      setUser(data.user ?? null);
-    });
+
+      const mergedUser: AuthUser = {
+        ...user,
+        claims: claimsRes?.claims as UserClaims | undefined,
+      };
+
+      setUser(mergedUser);
+    };
+
+    loadUser();
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
+    } = supabase.auth.onAuthStateChange(() => {
+      loadUser();
     });
 
     return () => subscription.unsubscribe();

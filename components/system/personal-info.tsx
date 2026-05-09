@@ -1,8 +1,11 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState, useTransition } from 'react'
+import Image from 'next/image'
+import { UploadCloudIcon, ImageIcon } from 'lucide-react'
+import { z } from 'zod'
 
-import { UploadCloudIcon, TrashIcon, ImageIcon } from 'lucide-react'
+import { removeAvatar, savePersonalInfo, uploadAvatar } from '@/lib/actions/profile'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -15,148 +18,194 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select'
+import { Separator } from '../ui/separator'
+import { toast } from 'sonner'
+import { profileSchema } from '@/lib/zod-schema/profile'
 
+type Props = {
+  data?: {
+    firstName?: string
+    lastName?: string
+    mobile?: string
+    gender?: string
+    avatarUrl?: string
+  }
+}
 
-const PersonalInfo = () => {
-  const inputRef = useRef<HTMLInputElement | null>(null)
-  const [file, setFile] = useState<File | null>(null)
-  const [preview, setPreview] = useState<string | null>(null)
+export default function PersonalInfo({ data }: Props) {
+  const inputRef = useRef<HTMLInputElement>(null)
 
-  useEffect(() => {
-    if (!file) {
-      const t = window.setTimeout(() => setPreview(null), 0)
+  const [isPending, startTransition] = useTransition()
+  const [isUploading, startUpload] = useTransition()
+  const [isRemoving, startRemove] = useTransition()
 
-      return () => clearTimeout(t)
-    }
-
-    const url = URL.createObjectURL(file)
-
-    const t = window.setTimeout(() => setPreview(url), 0)
-
-    return () => {
-      clearTimeout(t)
-      URL.revokeObjectURL(url)
-    }
-  }, [file])
+  const [preview, setPreview] = useState(data?.avatarUrl ?? null)
+  const [gender, setGender] = useState(data?.gender ?? '')
 
   const onSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0]
-
     if (!f) return
 
-    if (!f.type.startsWith('image/')) {
-      window.alert('Please select an image file')
-      e.currentTarget.value = ''
+    const localPreview = URL.createObjectURL(f)
+    setPreview(localPreview)
 
-      return
-    }
+    startUpload(async () => {
+      const res = await uploadAvatar(f)
 
-    if (f.size > 1024 * 1024) {
-      window.alert('File must be smaller than 1MB')
-      e.currentTarget.value = ''
-
-      return
-    }
-
-    setFile(f)
+      if (res?.success) {
+        toast.success(res.message)
+        setPreview(res.url ?? localPreview)
+      } else {
+        toast.error(res?.message ?? 'Upload failed')
+        setPreview(data?.avatarUrl ?? null)
+      }
+    })
   }
 
-  const openPicker = () => inputRef.current?.click()
+  const handleRemoveAvatar = () => {
+    startRemove(async () => {
+      const res = await removeAvatar()
 
-  const remove = () => {
-    setFile(null)
-    if (inputRef.current) inputRef.current.value = ''
+      if (res?.success) {
+        toast.success(res.message)
+        setPreview(null)
+        if (inputRef.current) inputRef.current.value = ''
+      } else {
+        toast.error(res?.message ?? 'Remove failed')
+      }
+    })
+  }
+
+  const onSubmit = async (formData: FormData) => {
+    const values = {
+      firstName: String(formData.get('firstName') ?? '').trim(),
+      lastName: String(formData.get('lastName') ?? '').trim(),
+      mobile: String(formData.get('mobile') ?? '').trim(),
+      gender
+    }
+
+    const parsed = profileSchema.safeParse(values)
+
+    if (!parsed.success) {
+      toast.error(parsed.error.issues[0]?.message ?? 'Invalid form')
+      return
+    }
+
+    formData.set('gender', gender)
+
+    startTransition(async () => {
+      const res = await savePersonalInfo(formData)
+
+      if (res) toast.success('Profile updated successfully')
+      else toast.error('Failed to save profile')
+    })
   }
 
   return (
-    <div className='grid grid-cols-1 gap-10 lg:grid-cols-3'>
-      {/* Vertical Tabs List */}
-      <div className='flex flex-col space-y-1'>
-        <h3 className='font-semibold'>Personal Information</h3>
-        <p className='text-muted-foreground text-sm'>Manage your personal information and role.</p>
+    <form action={onSubmit} className="space-y-6">
+      <div className="flex flex-col gap-8 py-4 lg:flex-row lg:items-start lg:gap-12 items-center">
+
+        <div className="flex w-full flex-col items-center gap-2 lg:w-auto">
+          <div
+            onClick={() => inputRef.current?.click()}
+            className="flex size-24 cursor-pointer items-center justify-center overflow-hidden rounded-full border sm:size-28"
+          >
+            {preview ? (
+              <Image
+                src={preview}
+                alt="avatar"
+                width={112}
+                height={112}
+                className="h-full w-full object-contain"
+              />
+            ) : (
+              <ImageIcon />
+            )}
+          </div>
+
+          <input
+            ref={inputRef}
+            hidden
+            type="file"
+            accept="image/*"
+            onChange={onSelect}
+          />
+
+          <Button
+            type="button"
+            variant="outline"
+            disabled={isUploading}
+            onClick={() => inputRef.current?.click()}
+          >
+            <UploadCloudIcon className="mr-2 h-4 w-4" />
+            {isUploading ? 'Uploading...' : 'Upload'}
+          </Button>
+
+          <Button
+            type="button"
+            variant="ghost"
+            disabled={isRemoving || !preview}
+            onClick={handleRemoveAvatar}
+            className="text-destructive"
+          >
+            {isRemoving ? 'Removing...' : 'Remove'}
+          </Button>
+        </div>
+
+        <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6">
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="firstName">First Name</Label>
+            <Input
+              id="firstName"
+              name="firstName"
+              defaultValue={data?.firstName ?? ''}
+            />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="lastName">Last Name</Label>
+            <Input
+              id="lastName"
+              name="lastName"
+              defaultValue={data?.lastName ?? ''}
+            />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="mobile">Mobile</Label>
+            <Input
+              id="mobile"
+              name="mobile"
+              defaultValue={data?.mobile ?? ''}
+            />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <Label>Gender</Label>
+            <Select value={gender} onValueChange={setGender}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select gender" />
+              </SelectTrigger>
+
+              <SelectContent>
+                <SelectGroup>
+                  <SelectItem value="male">Male</SelectItem>
+                  <SelectItem value="female">Female</SelectItem>
+                  <SelectItem value="other">Other</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
       </div>
-      <div className='flex justify-end'>
-        <Button type='submit' className='max-sm:w-full'>
-          Save Changes
+
+      <Separator />
+
+      <div className="flex justify-end">
+        <Button type="submit" disabled={isPending}>
+          {isPending ? 'Saving...' : 'Save Changes'}
         </Button>
       </div>
-
-      {/* Content */}
-      <div className='space-y-6 lg:col-span-2'>
-        <form className='mx-auto'>
-          <div className='mb-6 w-full space-y-2'>
-            <Label>Your Avatar</Label>
-            <div className='flex items-center gap-4'>
-              <div
-                role='button'
-                tabIndex={0}
-                aria-label='Upload your avatar'
-                onClick={openPicker}
-                onKeyDown={e => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault()
-                    openPicker()
-                  }
-                }}
-                className='flex h-20 w-20 cursor-pointer items-center justify-center overflow-hidden rounded-full border border-dashed hover:opacity-95'
-              >
-                {preview ? (
-                  <img src={preview} alt='avatar preview' className='h-full w-full object-cover' />
-                ) : (
-                  <ImageIcon />
-                )}
-              </div>
-
-              <div className='flex items-center gap-2'>
-                <input ref={inputRef} type='file' accept='image/*' className='hidden' onChange={onSelect} />
-                <Button type='button' variant='outline' onClick={openPicker} className='flex items-center gap-2'>
-                  <UploadCloudIcon />
-                  Upload avatar
-                </Button>
-                <Button type='button' variant='ghost' onClick={remove} disabled={!file} className='text-destructive'>
-                  <TrashIcon />
-                </Button>
-              </div>
-            </div>
-            <p className='text-muted-foreground text-sm'>Pick a photo up to 1MB.</p>
-          </div>
-          <div className='grid grid-cols-1 gap-6 sm:grid-cols-2'>
-            <div className='flex flex-col items-start gap-2'>
-              <Label htmlFor='multi-step-personal-info-first-name'>First Name</Label>
-              <Input id='multi-step-personal-info-first-name' placeholder='John' />
-            </div>
-            <div className='flex flex-col items-start gap-2'>
-              <Label htmlFor='multi-step-personal-info-last-name'>Last Name</Label>
-              <Input id='multi-step-personal-info-last-name' placeholder='Doe' />
-            </div>
-            <div className='flex flex-col items-start gap-2'>
-              <Label htmlFor='multi-step-personal-info-mobile'>Mobile</Label>
-              <Input id='multi-step-personal-info-mobile' type='tel' placeholder='+1 (555) 123-4567' />
-            </div>
-
-
-            <div className='space-y-2'>
-              <Label htmlFor='gender'>Gender</Label>
-              <Select>
-                <SelectTrigger id='gender' className='w-full'>
-                  <SelectValue placeholder='Select a gender' />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectItem value='male'>Male</SelectItem>
-                    <SelectItem value='female'>Female</SelectItem>
-                    <SelectItem value='other'>Other</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </div>
-
-          </div>
-        </form>
-
-      </div>
-    </div>
+    </form>
   )
 }
-
-export default PersonalInfo
