@@ -2,7 +2,7 @@
 
 import { useRef, useState, useTransition } from 'react'
 import Image from 'next/image'
-import { UploadCloudIcon, ImageIcon, Save } from 'lucide-react'
+import { UploadCloudIcon, ImageIcon, Save, X, Trash } from 'lucide-react'
 
 import { removeAvatar, savePersonalInfo, uploadAvatar } from '@/lib/actions/profile'
 
@@ -124,18 +124,18 @@ export default function PersonalInfo({ data }: Props) {
               )}
             </div>
 
-            {/* Remove X */}
+
             {preview && (
               <button
                 type="button"
                 onClick={handleRemoveAvatar}
                 disabled={isRemoving}
-                className="absolute -right-1 top-0 z-10 flex size-7 items-center justify-center rounded-full border bg-background shadow-sm transition hover:bg-destructive hover:text-white disabled:pointer-events-none disabled:opacity-50"
+                className="absolute right-2 bottom-0 z-10 flex size-6 items-center justify-center rounded-full border bg-background shadow-sm transition hover:bg-destructive hover:text-white disabled:pointer-events-none disabled:opacity-50"
               >
                 {isRemoving ? (
                   <span className="text-xs">...</span>
                 ) : (
-                  <X className="h-4 w-4" />
+                  <Trash className="h-3 w-3" />
                 )}
               </button>
             )}

@@ -163,9 +163,6 @@ export default function SettingsActivityLog({
           <div className="grid gap-4 md:grid-cols-2">
             <div className="flex flex-col gap-4 rounded-lg border p-4">
               <div className="flex items-center gap-2">
-                <div className="flex size-8 items-center justify-center rounded-lg bg-muted">
-                  <Search className="size-4" />
-                </div>
                 <FieldLabel className="mb-0">Search</FieldLabel>
               </div>
               <InputGroup>
@@ -175,33 +172,29 @@ export default function SettingsActivityLog({
                   value={searchQuery}
                 />
               </InputGroup>
-              <div className="flex items-center gap-2">
-                <div className="flex size-8 items-center justify-center rounded-lg bg-muted">
-                  <Filter className="size-4" />
+              <div className="flex gap-4 flex-col">
+                <div className="flex items-center gap-2">
+                  <FieldLabel className="mb-0" htmlFor="action-type">
+                    Action Type
+                  </FieldLabel>
                 </div>
-                <FieldLabel className="mb-0" htmlFor="action-type">
-                  Action Type
-                </FieldLabel>
+                <Select onValueChange={setSelectedType} value={selectedType}>
+                  <SelectTrigger id="action-type">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {actionTypes.map((type) => (
+                      <SelectItem key={type.value} value={type.value}>
+                        {type.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
-              <Select onValueChange={setSelectedType} value={selectedType}>
-                <SelectTrigger id="action-type">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {actionTypes.map((type) => (
-                    <SelectItem key={type.value} value={type.value}>
-                      {type.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
             </div>
 
             <div className="flex flex-col gap-4 rounded-lg border p-4">
               <div className="flex items-center gap-2">
-                <div className="flex size-8 items-center justify-center rounded-lg bg-muted">
-                  <Calendar className="size-4" />
-                </div>
                 <FieldLabel className="mb-0" htmlFor="date-start">
                   Start Date
                 </FieldLabel>
@@ -217,9 +210,6 @@ export default function SettingsActivityLog({
                 />
               </InputGroup>
               <div className="flex items-center gap-2">
-                <div className="flex size-8 items-center justify-center rounded-lg bg-muted">
-                  <Calendar className="size-4" />
-                </div>
                 <FieldLabel className="mb-0" htmlFor="date-end">
                   End Date
                 </FieldLabel>

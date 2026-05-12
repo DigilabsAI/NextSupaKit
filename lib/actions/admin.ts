@@ -43,3 +43,48 @@ export async function changeUserRole(
         message: `Role updated to ${role}`
     }
 }
+
+type AuditInput = {
+    tableName: string
+    recordId: string
+    action: 'INSERT' | 'UPDATE' | 'DELETE'
+    oldData?: unknown
+    newData?: unknown
+}
+
+export async function createAuditTrail({
+    tableName,
+    recordId,
+    action,
+    oldData,
+    newData
+}: AuditInput) {
+    const supabase = await createClient()
+
+    const session = await getSessionUser()
+
+    const changedBy = session?.id ?? null
+
+    const { error } = await supabase
+        .from('audit_trail')
+        .insert({
+            table_name: tableName,
+            record_id: recordId,
+            action,
+            old_data: oldData ?? null,
+            new_data: newData ?? null,
+            changed_by: changedBy
+        })
+
+    if (error) {
+        console.error('Audit Trail Error:', error)
+        return {
+            success: false,
+            message: 'Failed to create audit log'
+        }
+    }
+
+    return {
+        success: true
+    }
+}

@@ -58,8 +58,8 @@ export function TableMembersShowcasePage({ members }: Props) {
   };
 
   return (
-    <div className="min-h-screen bg-background p-6">
-      <div className="mx-auto max-w-6xl space-y-6">
+    <div className="min-h-screen bg-background">
+      <div className="mr-auto w-full max-w-6xl space-y-6">
 
         <div className="flex items-end justify-between">
           <div>
@@ -75,7 +75,7 @@ export function TableMembersShowcasePage({ members }: Props) {
           </Button>
         </div>
 
-        <div className="rounded-xl border bg-card">
+        <div className="rounded-md border bg-card">
           <Table>
             <TableHeader>
               <TableRow>
