@@ -40,6 +40,15 @@ yarn-error.log*
 # vercel
 .vercel
 
+# ai-coding files
+.agents
+.agents/*
+
+skills-lock.json
+AI_PROJECT_SUMMARY.md
+session-ses_1cf0.md
+must-better-arch.md
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

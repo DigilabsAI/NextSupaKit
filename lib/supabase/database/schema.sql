@@ -40,3 +40,4 @@ create table if not exists public.audit_trail (
 
 --for buckets read the docs
 --bucket created was profile for user avatars
+  
